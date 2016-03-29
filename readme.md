@@ -1,10 +1,13 @@
+@page can-control-plugin
+@test src/test/test.html
+
 # can-control-plugin
 
 [![Build Status](https://travis-ci.org/canjs/can-control-plugin.png?branch=master)](https://travis-ci.org/canjs/can-control-plugin)
 
 Registers a jQuery plugin function for Controls
 
-## Usage
+## Installation
 
 ### ES6 use
 
