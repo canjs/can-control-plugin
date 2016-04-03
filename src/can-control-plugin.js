@@ -20,15 +20,14 @@ var i, isAControllerOf = function (instance, controllers) {
 		return false;
 	}, makeArray = can.makeArray,
 	old = can.Control.setup;
-/*
- * static
- */
+
+
 can.Control.setup = function () {
 	// if you didn't provide a name, or are control, don't do anything
 	if (this !== can.Control) {
 		/**
 		 * @property {String} can.Control.plugin.static.pluginName pluginName
-		 * @parent can.Control.plugin
+		 * @parent can-control-plugin.static
 		 *
 		 * @description
 		 *
@@ -67,7 +66,7 @@ $.fn.extend({
 
 	/**
 	 * @function jQuery.fn.controls jQuery.fn.controls
-	 * @parent can.Control.plugin
+	 * @parent can-control-plugin.prototype
 	 * @description Get the Controls associated with elements.
 	 * @signature `jQuery.fn.controls([type])`
 	 * @param {String|can.Control} [control] The type of Controls to find.
@@ -122,7 +121,7 @@ $.fn.extend({
 
 	/**
 	 * @function jQuery.fn.control jQuery.fn.control
-	 * @parent can.Control.plugin
+	 * @parent can-control-plugin.prototype
 	 * @description Get the Control associated with elements.
 	 * @signature `jQuery.fn.control([type])`
 	 * @param {String|can.Control} [control] The type of Control to find.
@@ -175,14 +174,14 @@ can.Control.plugin = function (pluginname) {
 };
 /**
  * @function can.Control.plugin.prototype.update update
- * @parent can.Control.plugin
+ * @parent can-control-plugin.prototype
  *
  * @description Reconfigure a control.
  * @signature `update(newOptions)`
  * @param {Object} newOptions Options to merge into the current options.
  *
  * @body
- * Update extends [can.Control.prototype.options options]
+ * Update extends [can.Control.prototype.options options](https://canjs.com/docs/can.Control.prototype.options.html)
  * with the `options` argument and rebinds all events.  It
  * re-configures the control.
  *
@@ -209,8 +208,7 @@ can.Control.plugin = function (pluginname) {
  *
  * *Update* is called if a control's plugin helper is called with the plugin options on an element
  * that already has a control instance of the same type. If you want to implement your
- * own update method make sure to call the old one either using the [can.Construct.super super] plugin or
- * by calling `can.Control.prototype.update.apply(this, arguments);`.
+ * own update method make sure to call the old one by calling `can.Control.prototype.update.apply(this, arguments);`.
  * For example, you can change the content of the control element every time the options change:
  *
  *		var Plugin = can.Control({
@@ -239,11 +237,11 @@ can.Control.plugin = function (pluginname) {
  *		$('#control').html();
  *		// Calling update. Updated 2 times
  *
- * @demo can/control/plugin/demo-update.html
+ * @demo  src/index.html
  *
  * @param {Object} options A list of options to merge with
- * [can.Control.prototype.options this.options].  Often this method
- * is called by the [can.Control.plugin jQuery helper function].
+ * [this.options](https://canjs.com/docs/can.Control.prototype.options.html).  Often this method
+ * is called by the [can-control-plugin jQuery helper function].
  */
 can.Control.prototype.update = function (options) {
 	can.extend(this.options, options);
