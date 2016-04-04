@@ -1,9 +1,6 @@
-@page can-control-plugin
-@test src/test/test.html
-@group can-control-plugin.static 0 Static
-@group can-control-plugin.prototype 1 Prototype
+# can-control-plugin (DEPRECATED)
 
-## can-control-plugin
+**can-control-plugin is deprecated**
 
 [![Build Status](https://travis-ci.org/canjs/can-control-plugin.png?branch=master)](https://travis-ci.org/canjs/can-control-plugin)
 
@@ -68,10 +65,130 @@ For more information on this, see [jQuery.fn.control] or [jQuery.fn.controls].
 
 ### Demo
 
-The following demo shows creating a plugin widget and then updating the widget's `times` variable
-for each time the button was clicked.
+*See: src/index.html*
 
-@demo src/index.html
+The demo shows creating a plugin widget and then updating the widget's `times` variable for each time the button was clicked.
+
+## API
+
+### Static
+
+#### `{String} pluginName`
+
+Allows you to define the name of the jQuery plugin.
+
+	var Filler = can.Control({
+		pluginName: 'fillWith'
+	},{});
+
+	$("#foo").fillWith();
+
+Setting the static `pluginName` property allows you to override the default name with your own.
+
+If you don't provide a `pluginName`, the control falls back to the fullName attribute:
+
+	can.Control('Ui.Layout.FillWith', {}, {});
+	$("#foo").ui_layout_fill_with();
+
+### Prototype
+
+#### `jQuery.fn.controls([type])`
+
+- Param: `{String|can.Control}` control - The type of Controls to find
+- Return `{can.Control}` - The controls associated with the given elements.
+
+When the widget is initialized, the plugin control creates an array
+of control instance(s) with the DOM element it was initialized on using
+[can.data](https://canjs.com/docs/can.data.html) method.
+
+The `controls` method allows you to get the control instance(s) for any element
+either by their type or pluginName.
+
+    var MyBox = can.Control({
+       pluginName : 'myBox'
+    }, {});
+
+    var MyClock = can.Control({
+       pluginName : 'myClock'
+    }, {});
+
+	//- Inits the widgets
+	$('.widgets:eq(0)').myBox();
+	$('.widgets:eq(1)').myClock();
+	 
+	$('.widgets').controls() //-> [ MyBox, MyClock ]
+	$('.widgets').controls('myBox') // -> [MyBox]
+	$('.widgets').controls(MyClock) // -> MyClock
+
+#### `jQuery.fn.control([type])`
+
+- Param: `{String|can.Control}` control - The type of Control to find
+- Return `{can.Control}` - The first control found
+
+This is the same as `$().controls` except that it only returns the first Control found.
+
+	//- Init MyBox widget
+	$('.widgets').my_box();
+    
+	<div class="widgets my_box" />
+    
+	$('.widgets').controls() //-> MyBox
+
+#### `update(newOptions)`
+
+- Param: `{Object}` newOptions - Options to merge into the current options.
+
+Update extends [options](https://canjs.com/docs/can.Control.prototype.options.html) with the `options` argument and rebinds all events.  It re-configures the control.
+
+For example, the following control wraps a recipe form. When the form
+is submitted, it creates the recipe on the server.  When the recipe
+is `created`, it resets the form with a new instance.
+
+	 var Creator = can.Control({
+		 "{recipe} created" : function(){
+		 	this.update({recipe : new Recipe()});
+		 	this.element[0].reset();
+		 	this.element.find("[type=submit]").val("Create Recipe")
+		 },
+		 "submit" : function(el, ev){
+		 	ev.preventDefault();
+		 	var recipe = this.options.recipe;
+		 	recipe.attrs( this.element.formParams() );
+		 	this.element.find("[type=submit]").val("Saving...")
+		 	recipe.save();
+		 }
+	});
+	 
+	$('#createRecipes').creator({ recipe : new Recipe() })
+
+
+*Update* is called if a control's plugin helper is called with the plugin options on an element that already has a control instance of the same type. If you want to implement your own update method make sure to call the old one by calling `can.Control.prototype.update.apply(this, arguments);`. For example, you can change the content of the control element every time the options change:
+
+	 var Plugin = can.Control({
+	 	pluginName: 'myPlugin'
+	 }, {
+	 	init : function(el, options) {
+	 	this.updateCount = 0;
+	 	this.update({
+	 		text : 'Initialized'
+	 	});
+	 },
+	 update : function(options) {
+	 	// Call the can.Control update first.
+	 	// Use this._super when using can/construct/super
+	 	can.Control.prototype.update.call(this, options);
+	 	this.element.html(this.options.text + ' ' +
+	 		(++this.updateCount) + ' times');
+	 	}
+	 });
+	 
+	 $('#control').myPlugin();
+	 $('#control').html();
+	 // Initialized. Updated 1 times
+	 
+	 $('#control').myPlugin({ text : 'Calling update. Updated' });
+	 $('#control').html();
+	 // Calling update. Updated 2 times
 
 ## Use
 
