@@ -1,5 +1,7 @@
 # can-control-plugin (DEPRECATED)
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/canjs/can-control-plugin.svg)](https://greenkeeper.io/)
+
 **can-control-plugin is deprecated**
 
 [![Build Status](https://travis-ci.org/canjs/can-control-plugin.png?branch=master)](https://travis-ci.org/canjs/can-control-plugin)
